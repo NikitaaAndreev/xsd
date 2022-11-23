@@ -1,0 +1,662 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified" attributeFormDefault="unqualified" vc:minVersion="1.1">
+    <xs:complexType name="SendRqRqDataType">
+        <xs:annotation>
+            <xs:documentation>Комплексный тип для запроса типа SendRequestRequest</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="requestId">
+                <xs:annotation>
+                    <xs:documentation>Уникальный ID запроса системы инициатора, UUID v.1 RFC4122</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="requestDateTime" type="xs:dateTime">
+                <xs:annotation>
+                    <xs:documentation>Время создания запроса</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="systemId">
+                <xs:annotation>
+                    <xs:documentation>Наименование системы инициатора запроса</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="100"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="namespace_uri" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>URI вызываемого вида сведений СМЭВ</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="message_id">
+                <xs:annotation>
+                    <xs:documentation>ID запроса в формате СМЭВ, UUID v.1 RFC4122</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="message_primary_content_64" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>MessagePrimaryContent СМЭВ-конверта в формате base64</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="attach" type="AttachType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Вложенные файлы</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SendRqRsDataType">
+        <xs:annotation>
+            <xs:documentation>Комплексный тип для ответа типа SendRequestResponse</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="requestId">
+                <xs:annotation>
+                    <xs:documentation>Уникальный ID запроса SendRqRqData</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="responseDateTime" type="xs:dateTime">
+                <xs:annotation>
+                    <xs:documentation>Время создания ответа SendRqRsData</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="systemId">
+                <xs:annotation>
+                    <xs:documentation>Наименование системы инициатора запроса SendRqRqData</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="100"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="message_id">
+                <xs:annotation>
+                    <xs:documentation>ID запроса в формате СМЭВ SendRqRqData</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="adapter_status">
+                <xs:annotation>
+                    <xs:documentation>Статус выполнения операции адаптером СМЭВ (SUCCESS, ERROR)</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="SUCCESS"/>
+                        <xs:enumeration value="ERROR"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="error" type="ErrorType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Ошибка</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="session_id">
+                <xs:annotation>
+                    <xs:documentation>Уникальный ID сессии сеанса взаимодействия с адаптером СМЭВ</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SendRsRqDataType">
+        <xs:annotation>
+            <xs:documentation>Комплексный тип для запроса типа SendResponseRequest</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="requestId">
+                <xs:annotation>
+                    <xs:documentation>Уникальный ID запроса системы инициатора, UUID v.1 RFC4122</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="requestDateTime" type="xs:dateTime">
+                <xs:annotation>
+                    <xs:documentation>Время создания запроса</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="systemId">
+                <xs:annotation>
+                    <xs:documentation>Наименование системы инициатора запроса</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="100"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="namespace_uri" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>URI вызываемого вида сведений СМЭВ</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="message_id">
+                <xs:annotation>
+                    <xs:documentation>ID запроса в формате СМЭВ, UUID v.1 RFC4122</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="to">
+                <xs:annotation>
+                    <xs:documentation>Адрес доставки ответа, ReplyTo ответа GetRequestResponse</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="4000"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="message_primary_content_64" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>MessagePrimaryContent СМЭВ-конверта в формате base64</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="attach" type="AttachType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Вложенные файлы</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SendRsRsDataType">
+        <xs:annotation>
+            <xs:documentation>Комплексный тип для ответа типа SendResponseResponse</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="requestId">
+                <xs:annotation>
+                    <xs:documentation>Уникальный ID запроса SendRsRqData</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="responseDateTime" type="xs:dateTime">
+                <xs:annotation>
+                    <xs:documentation>Время создания ответа SendRsRsData</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="systemId">
+                <xs:annotation>
+                    <xs:documentation>Наименование системы инициатора запроса SendRsRqData</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="100"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="message_id">
+                <xs:annotation>
+                    <xs:documentation>ID запроса в формате СМЭВ SendRsRqData</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="adapter_status">
+                <xs:annotation>
+                    <xs:documentation>Статус выполнения операции адаптером СМЭВ (SUCCESS, ERROR)</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="SUCCESS"/>
+                        <xs:enumeration value="ERROR"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="error" type="ErrorType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Ошибка</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="session_id">
+                <xs:annotation>
+                    <xs:documentation>Уникальный ID сессии сеанса взаимодействия с адаптером СМЭВ</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="GetRqRsDataType">
+        <xs:annotation>
+            <xs:documentation>Комплексный тип для ответа GetRequestResponse</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="responseId">
+                <xs:annotation>
+                    <xs:documentation>Уникальный ID ответа UUID v.1 RFC4122 адаптера</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="responseDateTime" type="xs:dateTime">
+                <xs:annotation>
+                    <xs:documentation>Время создания адаптером ответа GetRqRsData</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="systemId">
+                <xs:annotation>
+                    <xs:documentation>Наименование системы, которой отправляется ответ GetRqRsData</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="100"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="namespace_uri" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>URI вида сведений, по которому сформирован ответ</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="root_element_local_name" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Имя корневого XML-элемента ответа СМЭВ</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="message_id">
+                <xs:annotation>
+                    <xs:documentation>ID ответа в формате СМЭВ</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="adapter_status">
+                <xs:annotation>
+                    <xs:documentation>Статус выполнения операции адаптером СМЭВ (SUCCESS, ERROR)</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="SUCCESS"/>
+                        <xs:enumeration value="ERROR"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="error" type="ErrorType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Ошибка</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="reply_to" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Адрес доставки ReplyTo</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="4000"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="message_primary_content_64" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>MessagePrimaryContent СМЭВ-конверта в формате base64</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="attach" type="AttachType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Вложенные файлы</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ftp_attach" type="FtpAttachType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Вложенные FTP-файлы</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="session_id">
+                <xs:annotation>
+                    <xs:documentation>Уникальный ID сессии сеанса взаимодействия с адаптером СМЭВ</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="GetRsRsDataType">
+        <xs:annotation>
+            <xs:documentation>Комплексный тип для ответа GetResponseResponse</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="responseId">
+                <xs:annotation>
+                    <xs:documentation>Уникальный ID ответа адаптера</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="responseDateTime" type="xs:dateTime">
+                <xs:annotation>
+                    <xs:documentation>Время создания адаптером ответа GetRsRsData</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="systemId">
+                <xs:annotation>
+                    <xs:documentation>Наименование системы, которой отправляется ответ</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="100"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="namespace_uri" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>URI вида сведений СМЭВ, по которому сформирован ответ</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="root_element_local_name" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Имя корневого XML-элемента ответа СМЭВ</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="message_id">
+                <xs:annotation>
+                    <xs:documentation>ID ответа в формате СМЭВ</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="originalMessageId">
+                <xs:annotation>
+                    <xs:documentation>ID запроса SendRequestRequest, на который пришел данный ответ</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="adapter_status">
+                <xs:annotation>
+                    <xs:documentation>Статус выполнения операции адаптером СМЭВ (SUCCESS, ERROR)</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="SUCCESS"/>
+                        <xs:enumeration value="ERROR"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="error" type="ErrorType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Ошибка</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="to" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Адрес доставки ответа</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="4000"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="message_primary_content_64" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>MessagePrimaryContent СМЭВ-конверта в формате base64</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="attach" type="AttachType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Вложенные файлы</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ftp_attach" type="FtpAttachType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Вложенные FTP-файлы</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="session_id">
+                <xs:annotation>
+                    <xs:documentation>Уникальный ID сессии сеанса взаимодействия с адаптером СМЭВ</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="AttachType">
+        <xs:annotation>
+            <xs:documentation>Комплексный тип для аттачей запросов SendRequestRequest, SendResponseRequest и ответов GetRequestResponse, GetResponseResponse</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="name">
+                <xs:annotation>
+                    <xs:documentation>Наименование файла</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="255"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="content64" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Содержимое файла в формате base64</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="verify_status" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Статус проверки подписи аттача, заполняется в GetRqRsData и GetRsRsData</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="SUCCESS"/>
+                        <xs:enumeration value="ERROR"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="verify_desc" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Описание результата проверки подписи аттача, заполняется в GetRqRsData и GetRsRsData</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="2000"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="FtpAttachType">
+        <xs:annotation>
+            <xs:documentation>Комплексный тип для FTP-аттачей ответов GetRequestResponse, GetResponseResponse</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="name">
+                <xs:annotation>
+                    <xs:documentation>Наименование файла</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="255"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="hash" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Хэш файла</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="target_folder">
+                <xs:annotation>
+                    <xs:documentation>Имя каталога сохранения файла в АС банка</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="120"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="verify_status" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Статус проверки подписи хэша файла</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="SUCCESS"/>
+                        <xs:enumeration value="ERROR"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="verify_desc" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Описание результата проверки подписи аттача</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="2000"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ErrorType">
+        <xs:annotation>
+            <xs:documentation>Комплексный тип для описания ошибки</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="error_status_code">
+                <xs:annotation>
+                    <xs:documentation>Статусный код ошибки</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="120"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="error_status_desc">
+                <xs:annotation>
+                    <xs:documentation>Текстовое описание ошибки</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="2000"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="error_vendor">
+                <xs:annotation>
+                    <xs:documentation>Система источник возникновения ошибки</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="32"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="reject_reason_code" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Код причины отклонения исходного запроса SendRequestRequest, заполняется отправителем</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="50"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="reject_reason_desc" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Описание причины отклонения исходного запроса SendRequestRequest, заполняется отправителем</xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="4000"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="SendRqRqData" type="SendRqRqDataType">
+        <xs:annotation>
+            <xs:documentation>Запрос SendRequestRequest</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="SendRqRsData" type="SendRqRsDataType">
+        <xs:annotation>
+            <xs:documentation>Ответ SendRequestResponse</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="SendRsRqData" type="SendRsRqDataType">
+        <xs:annotation>
+            <xs:documentation>Запрос SendResponseRequest</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="SendRsRsData" type="SendRsRsDataType">
+        <xs:annotation>
+            <xs:documentation>Ответ SendResponseResponse</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="GetRqRsData" type="GetRqRsDataType">
+        <xs:annotation>
+            <xs:documentation>Ответ GetRequestResponse</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="GetRsRsData" type="GetRsRsDataType">
+        <xs:annotation>
+            <xs:documentation>Ответ GetResponseResponse</xs:documentation>
+        </xs:annotation>
+    </xs:element>
+</xs:schema>
